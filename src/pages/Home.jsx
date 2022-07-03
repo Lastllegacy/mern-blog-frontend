@@ -8,13 +8,13 @@ import { TagsBlock } from '../components/TagsBlock';
 import { CommentsBlock } from '../components/CommentsBlock';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts, fetchTags } from '../redux/slices/posts';
-import { selectIsAuth } from '../redux/slices/auth';
 
 
 
 export const Home = () => {
   const dispatch = useDispatch();
   const { posts, tags} = useSelector(state => state.posts);
+  const userData = useSelector(state => state.auth.data);
 
   const isPostsLoading = posts.status === 'loading';
   const isTagsLoading = tags.status === 'loading';
@@ -39,13 +39,13 @@ export const Home = () => {
             <Post
               _id={obj._id}
               title={obj.title}
-              imageUrl={obj.imageUrl}
+              imageUrl={obj.imageUrl ? `http://localhost:4444${obj.imageUrl}` : ''}
               user={obj.user}
               createdAt={obj.createdAt}
               viewsCount={obj.viewsCount}
               commentsCount={3}
               tags={obj.tags}
-              isEditable
+              isEditable={userData ? userData._id === obj.user._id : false}
             />
           )
           )}
