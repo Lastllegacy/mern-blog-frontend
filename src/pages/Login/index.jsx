@@ -37,7 +37,6 @@ export const Login = () => {
       window.localStorage.setItem('token', data.payload.token)
     }
     
-    console.log(data)
   };
 
 

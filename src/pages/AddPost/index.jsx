@@ -37,7 +37,9 @@ export const AddPost = () => {
 
   useEffect(() => {
     if (id) {
-      axios.get(`/posts/${id}`).then(({ data }) => {
+      axios
+      .get(`/posts/${id}`)
+      .then(({ data }) => {
         setTitle(data.title);
         setTags(data.tags);
         setImageUrl(data.imageUrl);
@@ -77,7 +79,7 @@ export const AddPost = () => {
     try {
       const fields = {
         title,
-        tags,
+        tags: tags.split(' '),
         text,
         imageUrl
       };
@@ -89,7 +91,6 @@ export const AddPost = () => {
 
       navigate(`/posts/${pageId}`);
     } catch (error) {
-      console.log(error)
       alert("Статья не может быть создана");
     }
   };
@@ -120,7 +121,7 @@ export const AddPost = () => {
           </Button>
           <img
             className={styles.image}
-            src={`${process.env.REACT_APP_API_URL}${imageUrl}`}
+            src={`http://localhost:4444${imageUrl}`}
             alt="Uploaded"
           />
         </>

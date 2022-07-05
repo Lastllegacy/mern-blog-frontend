@@ -1,8 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from '../../axios'
 
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+export const fetchNewestPosts = createAsyncThunk('posts/fetchNewestPosts', async () => {
    const { data } = await axios.get('/posts');
+   return data 
+})
+
+export const fetchPopularPosts = createAsyncThunk('posts/fetchPopularPosts', async () => {
+   const { data } = await axios.get('/postsPopular');
    return data 
 })
 
@@ -31,16 +36,29 @@ const postsSlice = createSlice({
    initialState,
    reducers: {},
    extraReducers: {
-      // Получение постов
-      [fetchPosts.pending]: (state) => {
+      // Получение новых постов
+      [fetchNewestPosts.pending]: (state) => {
          state.posts.status = 'loading';
          state.posts.items = [];
       },
-      [fetchPosts.fulfilled]: (state, action) => {
+      [fetchNewestPosts.fulfilled]: (state, action) => {
          state.posts.status = 'loaded';
          state.posts.items = action.payload;
       },
-      [fetchPosts.rejected]: (state) => {
+      [fetchNewestPosts.rejected]: (state) => {
+         state.posts.status = 'error';
+         state.posts.items = [];
+      },
+      // Получение популярных постов
+      [fetchPopularPosts.pending]: (state) => {
+         state.posts.status = 'loading';
+         state.posts.items = [];
+      },
+      [fetchPopularPosts.fulfilled]: (state, action) => {
+         state.posts.status = 'loaded';
+         state.posts.items = action.payload;
+      },
+      [fetchPopularPosts.rejected]: (state) => {
          state.posts.status = 'error';
          state.posts.items = [];
       },
@@ -57,7 +75,7 @@ const postsSlice = createSlice({
          state.tags.status = 'error';
          state.tags.items = [];
       },
-      // Удаление  постов
+      // Удаление поста
       [fetchRemovePosts.pending]: (state, action) => {
          state.posts.items = state.posts.items.filter(obj => obj._id !== action.meta.arg);
       },
